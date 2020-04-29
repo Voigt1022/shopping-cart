@@ -96,10 +96,10 @@ const Product = ({ product, drawerstate, selection, size, user }) => {
         >
           <SizePick product={product} setAnchorEl={setAnchorEl} setSelectedsize={setSelectedsize} size={size} selection={selection} />
         </Popover>
-{/* 
-        <Button>
+
+        {/* <Button>
           <SizePick product={product} setAnchorEl={setAnchorEl} setSelectedsize={setSelectedsize} size={size} selection={selection} />
-        </Button> */}
+        </Button>  */}
 
         <Button
           className={classes.addbutton}

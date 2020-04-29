@@ -7,11 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover'
 
-import MoreIcon from '@material-ui/icons/MoreVert';
-
-import IconButton from '@material-ui/core/IconButton';
-
-
 import Cart from './Cart';
 
 import firebase from 'firebase/app';
@@ -167,8 +162,12 @@ const Appbar = ({ drawerstate, selection, size, user }) => {
   return (
     <AppBar className={classes.appbar} position="static">
       <Toolbar>
+        <a href="https://github.com/Voigt1022/shopping-cart">
+          <img src="data/github.svg" height="30" width="30"/>
+        </a>
         {user ? <Logout selection={selection} size={size} user={user} /> : <Login />}
         <Typography className={classes.title}>
+          
         </Typography>
         <Cart className={classes.cart} drawerstate={drawerstate} selection={selection} size={size} user={user} />
       </Toolbar>
