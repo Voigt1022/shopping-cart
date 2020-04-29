@@ -1,153 +1,49 @@
-import React, { useState, useEffect }from 'react';
-import './App.css';
-import firebase from './firebase.js'
-import ProductList from './components/ProductList.js'
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import clsx from 'clsx';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import React, { useEffect, useState } from 'react';
 
+import Container from '@material-ui/core/Container';
+
+import DashBoard from './Component/DashBoard/DashBoard';
+import Appbar from './Component/Appbar/Appbar'
+import FireBase from './Component/FireBase'
+import Selection from './Component/Selection'
+
+const db = FireBase.database().ref();
 
 const App = () => {
-  const drawerWidth = 400;
+  const [data, setData] = useState([]);
+  const [state, setState] = useState(false);
+  const [selected, setSelected, addToggle, deleteToggle, decreaseToggle] = Selection();
+  const [size, setSize] = useState({});
+  const [user, setUser] = useState(null);
 
-  const [data, setData] = useState({});
-  const products = Object.values(data);
-  const productid = Object.keys(data);
+  useEffect(() => {
+    FireBase.auth().onAuthStateChanged(setUser);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch('./data/products.json');
-      const json = await response.json();
-      setData(json);
+      const responseData = await fetch('./data/products.json');
+      const resData = await responseData.json();
+      setData(Object.values(resData));
     };
     fetchProducts();
   }, []);
 
-  const useStyles = makeStyles(theme => ({
-    root: {
-      display: "flex"
-    },
-    title: {
-      flexGrow: 1
-    },
-    hide: {
-      display: "none"
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0
-    },
-    drawerPaper: {
-      width: drawerWidth
-    },
-    drawerHeader: {
-      display: "flex",
-      alignItems: "center",
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-      justifyContent: "flex-start"
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      }),
-      marginRight: -drawerWidth
-    },
-    contentShift: {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen
-      }),
-      marginRight: 0
+  useEffect(() => {
+    const handleData = snap => {
+      if (snap.val()) { setSize(snap.val()); }
     }
-  }));
-
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    db.on('value', handleData, error => alert(error));
+    return () => { db.off('value', handleData) };
+  }, [])
 
   return (
     <React.Fragment>
-         <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap className={classes.title}>
-            Shopping Cart
-          </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerOpen}
-            className={clsx(open && classes.hide)}
-          >
-            <ShoppingCartIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        
-      </main>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="right"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            <Typography variant="h6" noWrap className={classes.title}>
-              Cart
-            </Typography>
-          </IconButton>
-        </div>
-        <Divider />
-        
-      </Drawer>
-    </div>
-
-
-        <ProductList products={products}/>
-
-        
-      </React.Fragment>
-    
+      <Appbar drawerstate={{ state, setState }} selection={{ selected, setSelected, addToggle, deleteToggle, decreaseToggle }} size={size} user={user} />
+      <Container maxWidth='xl'>
+        <DashBoard products={data} drawerstate={{ state, setState }} selection={{ selected, addToggle }} size={size} user={user} />
+      </Container>
+    </React.Fragment>
   );
 };
 
