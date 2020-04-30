@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react'
 
-import { Card, CardMedia, CardContent } from '@material-ui/core';
+import { Card, CardMedia, CardContent, CardActionArea } from '@material-ui/core';
 import { Button, Typography, Popover } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import SizePick from './SizePick'
+
 
 const useStyles = makeStyles({
   card: {
@@ -22,13 +23,16 @@ const useStyles = makeStyles({
     width: 250,
     '&:hover': { backgroundColor: 'gray' }
   },
-  sizebutton: {
+  size: {
     width: 250,
+    height: 36,
     color: 'black',
-    '&:hover': { backgroundColor: 'light-gray' }
+    '&:hover': { backgroundColor: 'white' }
   },
-  title: {
-    fontWeight: 'bold'
+  outofstockbutton: {
+    width: 250,
+    color: 'white',
+    backgroundColor: "gray"
   }
 });
 
@@ -41,11 +45,9 @@ const formatPrice = (x, currency) => {
   }
 };
 
-
 const Product = ({ product, drawerstate, selection, size, user }) => {
   const [anchorEl, setAnchorEl] = useState(false);
-  const [selectedsize, setSelectedsize] = useState('Open Size Chart');
-  const [add, setAdd] = useState('Add to cart');
+  const [selectedsize, setSelectedsize] = useState('');
   const popover = useRef();
   const classes = useStyles();
 
@@ -54,37 +56,31 @@ const Product = ({ product, drawerstate, selection, size, user }) => {
   return (
     <Card variant="outlined" className={classes.card}>
       <CardContent>
-        <Typography align="center" className={classes.title}>
-          {product.title}
+        <h2 margin-block="0">{product.title}</h2>
+        <Typography >
+          <big>"{product.description}"</big>
+        </Typography>
+        <Typography align="center">
+          <small>{product.currencyFormat + ' '}</small>
+          <big >{formattedPrice.substr(0, formattedPrice.length - 3)}</big>
+          <small>{formattedPrice.substr(formattedPrice.length - 3, 3)}</small>
         </Typography>
       </CardContent>
       <CardMedia
         component="img"
         image={"data/products/" + product.sku + "_1.jpg"}
       />
-      <CardContent>
-        <Typography align="center" className={classes.des}>
-          <small>Detail:</small> 
-          <big>{product.description }</big>
-        </Typography>
-        <Typography align="center">
-          <small>{product.currencyFormat+' '}</small>
-          <big>{formattedPrice.substr(0, formattedPrice.length - 3)}</big>
-          <small>{formattedPrice.substr(formattedPrice.length - 3, 3)}</small>
-        </Typography>
-      </CardContent>
+      
       <div className={classes.root}>
-        <Button
-          className={classes.sizebutton}
-          ref={popover}
-          onClick={() => setAnchorEl(true)}
-        >
+        <Typography align="center" className={classes.size} ref={popover}>
           {selectedsize}
-        </Button>
+        </Typography>
         <Popover
           open={anchorEl}
           anchorEl={popover.current}
-          onClose={() => setAnchorEl(false)}
+          onClose={() => {
+            setAnchorEl(false);
+          }}
           anchorOrigin={{
             vertical: 'top',
             horizontal: 'center'
@@ -96,27 +92,20 @@ const Product = ({ product, drawerstate, selection, size, user }) => {
         >
           <SizePick product={product} setAnchorEl={setAnchorEl} setSelectedsize={setSelectedsize} size={size} selection={selection} />
         </Popover>
-
-        {/* <Button>
-          <SizePick product={product} setAnchorEl={setAnchorEl} setSelectedsize={setSelectedsize} size={size} selection={selection} />
-        </Button>  */}
-
         <Button
           className={classes.addbutton}
-          disabled={(selectedsize !== 'Open Size Chart' && size[product.sku][selectedsize] === 0) || selection.selected.some(x => x.sku === product.sku && x.size === selectedsize && x[selectedsize] >= size[product.sku][selectedsize])}
+          disabled={(selectedsize !== '' && size[product.sku][selectedsize] === 0) || selection.selected.some(x => x.sku === product.sku && x.size === selectedsize && x[selectedsize] >= size[product.sku][selectedsize])}
           onClick={() => {
-            if (selectedsize === 'Open Size Chart') {
-              setAdd('Pick a Size first')
+            if (selectedsize === '') {
               setAnchorEl(true);
             }
             else {
               drawerstate.setState(true);
               selection.addToggle(product, selectedsize, user);
-              setAdd('Add to cart');
             }
           }}
         >
-          {add}
+          Pick Size & Add to Cart
           </Button>
       </div>
     </Card>

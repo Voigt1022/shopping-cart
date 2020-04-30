@@ -33,4 +33,6 @@ const SizePick = ({ product, setAnchorEl, setSelectedsize, size, selection }) =>
   )
 }
 
+
+
 export default SizePick;
