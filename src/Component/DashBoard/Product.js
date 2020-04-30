@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react'
 import { Card, CardMedia, CardContent, CardActionArea } from '@material-ui/core';
 import { Button, Typography, Popover } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider'
 
 import SizePick from './SizePick'
 
@@ -10,7 +11,7 @@ import SizePick from './SizePick'
 const useStyles = makeStyles({
   card: {
     width: 350,
-    height: 750
+    height: 730
   },
   root: {
     display: 'flex',
@@ -24,7 +25,7 @@ const useStyles = makeStyles({
     '&:hover': { backgroundColor: 'gray' }
   },
   size: {
-    width: 250,
+    width: 100,
     height: 36,
     color: 'black',
     '&:hover': { backgroundColor: 'white' }
@@ -55,26 +56,28 @@ const Product = ({ product, drawerstate, selection, size, user }) => {
 
   return (
     <Card variant="outlined" className={classes.card}>
-      <CardContent>
-        <h2 margin-block="0">{product.title}</h2>
-        <Typography >
-          <big>"{product.description}"</big>
-        </Typography>
-        <Typography align="center">
-          <small>{product.currencyFormat + ' '}</small>
-          <big >{formattedPrice.substr(0, formattedPrice.length - 3)}</big>
-          <small>{formattedPrice.substr(formattedPrice.length - 3, 3)}</small>
-        </Typography>
-      </CardContent>
+      <h2 margin-block="0">{product.title}</h2>
       <CardMedia
         component="img"
         image={"data/products/" + product.sku + "_1.jpg"}
       />
-      
+      <Typography >
+        <big>"{product.description}"</big>
+      </Typography>
+      <Typography align="center">
+        <small>{product.currencyFormat + ' '}</small>
+        <big >{formattedPrice.substr(0, formattedPrice.length - 3)}</big>
+        <small>{formattedPrice.substr(formattedPrice.length - 3, 3)}</small>
+      </Typography>
+      <Divider />
       <div className={classes.root}>
-        <Typography align="center" className={classes.size} ref={popover}>
+        <Button
+          className={classes.size}
+          ref={popover}
+          onClick={() => setAnchorEl(true)}
+        >
           {selectedsize}
-        </Typography>
+        </Button>
         <Popover
           open={anchorEl}
           anchorEl={popover.current}

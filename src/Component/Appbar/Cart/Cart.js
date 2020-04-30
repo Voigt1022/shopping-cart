@@ -21,7 +21,6 @@ const useWindowSize = () => {
 }
 
 const Cart = ({drawerstate,selection,size,user}) => {
-  // eslint-disable-next-line no-unused-vars
   const [width, height] = useWindowSize();
   let totalNum = 0;
    if(selection.selected.length>=1){
