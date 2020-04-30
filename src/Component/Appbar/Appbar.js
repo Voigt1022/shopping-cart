@@ -5,9 +5,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import Cart from './Cart';
-import Login from './Login'
-import Logout from './Logout'
+import Cart from './Cart/Cart';
+import Login from './User/Login'
+import Logout from './User/Logout'
 
 import 'firebase/database';
 import 'firebase/auth';
