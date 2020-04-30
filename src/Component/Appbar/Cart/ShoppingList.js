@@ -22,7 +22,6 @@ const useStyles = makeStyles({
   },
   card: {
     display: 'flex',
-
   },
   cardcontent: {
     display: 'flex',
@@ -47,21 +46,10 @@ const useStyles = makeStyles({
     marginTop: 45,
     marginLeft: -26
   },
-  checkout: {
-    display: 'flex',
-    flex: 'wrap',
-    margin: 10,
-  },
-  checkoutprice: {
-    flexGrow: 1
-  },
-  checkoutbutton: {
-    textAlign: 'center',
-  },
   checkoutbuttonself: {
     marginTop: 10,
     fontSize: 20,
-    width: 350,
+    width: 250,
     backgroundColor: props => props.totalCost ? 'black' : 'white',
     color: 'white',
     '&:hover': { backgroundColor: 'black' }
@@ -93,7 +81,6 @@ const ShoppingList = ({ selection, size, user, height }) => {
       selection.setSelected([...selection.selected])
     }
     notification();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size.checkout])
 
   return (
@@ -112,16 +99,13 @@ const ShoppingList = ({ selection, size, user, height }) => {
                 {item.title}
               </Typography>
               <Typography variant="caption">
-                {item.style}
-              </Typography>
-              <Typography variant="caption">
-                Size: {item.size}
-              </Typography>
-              <Typography variant="caption">
-                {item.currencyFormat}{item.price}
+                $ {item.price.toFixed(2)} | size: {item.size}
               </Typography>
               <Typography variant="caption">
                 Quantity: {item[item.size]}
+              </Typography>
+              <Typography variant="caption">
+                Price: $ {(item.price * item[item.size]).toFixed(2)}
               </Typography>
             </CardContent>
             <div className={classes.clearbutton}>
@@ -153,20 +137,15 @@ const ShoppingList = ({ selection, size, user, height }) => {
         )}
       </div>
       <Divider />
-      <div className={classes.checkout}>
-        <Typography variant="h6" className={classes.checkoutprice}>
-          SUBTOTAL
-         </Typography>
+      <div align="center">
         <Typography variant="h6">
           ${totalCost.toFixed(2)}
         </Typography>
-      </div>
-      <div className={classes.checkoutbutton}>
         <Button
           disabled={totalCost === 0}
           className={classes.checkoutbuttonself}
           onClick={() => {
-            alert(`Checkout - Subtotal: $ ${totalCost.toFixed(2)}`)
+            alert(`Subtotal: $ ${totalCost.toFixed(2)}`)
             selection.selected.forEach(item => {
               firebase.database().ref().child(item.sku).transaction(amount => { return { ...amount, [item.size]: size[item.sku][item.size] - item[item.size] } })
             })

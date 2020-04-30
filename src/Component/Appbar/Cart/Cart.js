@@ -2,7 +2,7 @@ import React,{useState,useLayoutEffect} from 'react'
 
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Badge from '@material-ui/core/Badge';
 
 import SideList from './SideList'
@@ -29,13 +29,9 @@ const Cart = ({drawerstate,selection,size,user}) => {
 
   return(
     <div>
-      <IconButton 
-        color="black" 
-        onClick={() => drawerstate.setState(true)} 
-        aira-label="add to shopping cart"
-      >
+      <IconButton onClick={() => drawerstate.setState(true)} >
         <Badge badgeContent={totalNum} color='black'>
-        <AddShoppingCartIcon fontSize="large"/>
+          <ShoppingCartIcon fontSize="large"/>
         </Badge>
       </IconButton>
       <Drawer

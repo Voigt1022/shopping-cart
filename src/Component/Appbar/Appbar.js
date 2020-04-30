@@ -19,9 +19,6 @@ const useStyles = makeStyles({
   title: {
     flexGrow: 1,
   },
-  cart: {
-    display: 'flex',
-  }
 });
 
 const Appbar = ({ drawerstate, selection, size, user }) => {
@@ -33,10 +30,8 @@ const Appbar = ({ drawerstate, selection, size, user }) => {
           <img src="data/github.svg" height="30" width="30"/>
         </a>
         {user ? <Logout selection={selection} size={size} user={user} /> : <Login />}
-        <Typography className={classes.title}>
-          
-        </Typography>
-        <Cart className={classes.cart} drawerstate={drawerstate} selection={selection} size={size} user={user} />
+        <Typography className={classes.title}/>
+        <Cart drawerstate={drawerstate} selection={selection} size={size} user={user} />
       </Toolbar>
     </AppBar>
   );

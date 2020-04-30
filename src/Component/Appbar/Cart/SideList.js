@@ -14,58 +14,8 @@ const useStyles = makeStyles({
   list: {
     width: 380,
   },
-  shoppinglist: {
-    height: props => props.height - 190,
-    overflow: 'auto',
-  },
   cartbutton: {
     color: 'black'
-  },
-  card: {
-    display: 'flex',
-
-  },
-  cardcontent: {
-    display: 'flex',
-    flexDirection: 'column',
-    minWidth: 200,
-  },
-  cardmedia: {
-    width: 49.5,
-    height: 72,
-    marginTop: 18,
-    marginLeft: 5,
-  },
-  clearbutton: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: 15,
-    marginLeft: 60
-  },
-  adjustbutton: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 45,
-    marginLeft: -26
-  },
-  checkout: {
-    display: 'flex',
-    flex: 'wrap',
-    margin: 10,
-  },
-  checkoutprice: {
-    flexGrow: 1
-  },
-  checkoutbutton: {
-    textAlign: 'center',
-  },
-  checkoutbuttonself: {
-    marginTop: 10,
-    fontSize: 20,
-    width: 350,
-    backgroundColor: props => props.totalCost ? 'black' : 'white',
-    color: 'black',
-    '&:hover': { backgroundColor: 'black' }
   }
 });
 
